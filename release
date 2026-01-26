@@ -12,15 +12,28 @@ fi
 COMMIT_MSG="$1"
 MODULE="$2"
 BUMP_TYPE="$3"
-VERSION_FILE="pkg/$MODULE/version.go"
+TAG_PREFIX="pkg/$MODULE/v"
 
-# Read current version numbers
-MAJOR=$(grep -E '^[[:space:]]*Major[[:space:]]*=' "$VERSION_FILE" | grep -oE '[0-9]+')
-MINOR=$(grep -E '^[[:space:]]*Minor[[:space:]]*=' "$VERSION_FILE" | grep -oE '[0-9]+')
-PATCH=$(grep -E '^[[:space:]]*Patch[[:space:]]*=' "$VERSION_FILE" | grep -oE '[0-9]+')
+# Get the latest tag for this module
+LATEST_TAG=$(git tag -l "${TAG_PREFIX}*" --sort=-v:refname | head -n 1)
+
+if [[ -z "$LATEST_TAG" ]]; then
+    # No existing tag, start from 0.0.0
+    MAJOR=0
+    MINOR=0
+    PATCH=0
+    echo "No existing tag found for $MODULE, starting from v0.0.0"
+else
+    # Extract version from tag (e.g., pkg/module/v1.2.3 -> 1.2.3)
+    VERSION="${LATEST_TAG#$TAG_PREFIX}"
+    MAJOR=$(echo "$VERSION" | cut -d. -f1)
+    MINOR=$(echo "$VERSION" | cut -d. -f2)
+    PATCH=$(echo "$VERSION" | cut -d. -f3)
+    echo "Current version: v$VERSION"
+fi
 
 if [[ -z "$MAJOR" || -z "$MINOR" || -z "$PATCH" ]]; then
-    echo "Failed to parse version from $VERSION_FILE"
+    echo "Failed to parse version from tag $LATEST_TAG"
     exit 1
 fi
 
@@ -46,26 +59,13 @@ esac
 
 NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 
-# Determine sed inline edit flags based on OS
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    SED_INPLACE=(-i '')
-else
-    SED_INPLACE=(-i)
-fi
-
-# Update only the constants in version.go
-sed "${SED_INPLACE[@]}" -E "s/^([[:space:]]*Major[[:space:]]*=[[:space:]]*)([0-9]+)/\1$MAJOR/" "$VERSION_FILE"
-sed "${SED_INPLACE[@]}" -E "s/^([[:space:]]*Minor[[:space:]]*=[[:space:]]*)([0-9]+)/\1$MINOR/" "$VERSION_FILE"
-sed "${SED_INPLACE[@]}" -E "s/^([[:space:]]*Patch[[:space:]]*=[[:space:]]*)([0-9]+)/\1$PATCH/" "$VERSION_FILE"
-
-echo "Version updated to $NEW_VERSION"
+echo "New version: v$NEW_VERSION"
 
 # Git commit, tag, push
-git add "$VERSION_FILE"
 git commit -am "$COMMIT_MSG"
 TAG="pkg/$MODULE/v$NEW_VERSION"
 git tag "$TAG"
 git push
-git push origin "$TAG"
+#git push origin "$TAG"
 
 echo "Released $TAG successfully!"
