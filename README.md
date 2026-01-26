@@ -7,7 +7,7 @@ BA stands for *Bibliotheca Alexandrina* (Latin, Library of Alexandria) – the m
 > but also that much of it can be collected again...
 > - Alberto Manguel
 
-BA is a collection of popular utilities for building production-ready Golang microservices
+BA is a collection of packages need for fast development of Golang microservices
 
 ---
 
@@ -23,7 +23,8 @@ go get -u github.com/trcmkr/ba/pkg/<module_name>
 
 ## Features
 
-
+- [x] closer – release resources on context done or any of signals
+- [ ] utils – lo-inspired collection of functions
 
 --- 
 
