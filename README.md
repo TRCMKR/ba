@@ -16,7 +16,7 @@ BA is a collection of packages need for fast development of Golang microservices
 To add BA submodule to your project, run the following command:
 
 ```bash
-go get -u github.com/trcmkr/ba/pkg/<module_name>
+go get -u github.com/trcmkr/ba/<module_name>
 ```
 
 ---

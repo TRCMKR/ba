@@ -12,7 +12,7 @@ fi
 COMMIT_MSG="$1"
 MODULE="$2"
 BUMP_TYPE="$3"
-TAG_PREFIX="pkg/$MODULE/v"
+TAG_PREFIX="$MODULE/v"
 
 # Get the latest tag for this module
 LATEST_TAG=$(git tag -l "${TAG_PREFIX}*" --sort=-v:refname | head -n 1)
@@ -63,7 +63,7 @@ echo "New version: v$NEW_VERSION"
 
 # Git commit, tag, push
 git commit -am "$COMMIT_MSG"
-TAG="pkg/$MODULE/v$NEW_VERSION"
+TAG="$MODULE/v$NEW_VERSION"
 git tag "$TAG"
 git push
 git push origin "$TAG"
