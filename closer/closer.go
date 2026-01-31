@@ -71,6 +71,7 @@ func (c *Closer) Wait() {
 func (c *Closer) CloseAll() {
 	c.once.Do(func() {
 		defer close(c.ready)
+		c.logger.Info("closing all resources")
 
 		callbacksCount := len(c.closeCallbacks)
 		for i, _ := range c.closeCallbacks {
