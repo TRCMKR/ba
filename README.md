@@ -13,8 +13,7 @@ BA is a collection of packages need for fast development of Golang microservices
 
 ## ⚠️ Stability Notice
 
-Until version `v1.0.0` is released,
-**no compatibility guarantees are provided**.  
+**No compatibility guarantees are provided**.  
 Breaking changes may be introduced in minor or patch releases.
 
 ---
@@ -34,7 +33,7 @@ go get -u github.com/trcmkr/ba/<module_name>
 - [x] closer – releases resources on context done or any of signals
 - [x] utils – lo-inspired collection of functions
 - [ ] bapub – kafka publisher
-- [ ] basup - kafka subscriber
+- [ ] basup – kafka subscriber
 - [ ] flusher – accumulates elements into a batch and on flush passes the batch to a handler 
 
 --- 
