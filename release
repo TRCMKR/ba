@@ -14,6 +14,19 @@ MODULE="$2"
 BUMP_TYPE="$3"
 TAG_PREFIX="$MODULE/v"
 
+# Check commit message for module tag
+if [[ "$COMMIT_MSG" =~ \[([^\]]+)\] ]]; then
+    # Message contains [something], check if it matches the module
+    MSG_MODULE="${BASH_REMATCH[1]}"
+    if [[ "$MSG_MODULE" != "$MODULE" ]]; then
+        echo "Error: Module in commit message [$MSG_MODULE] doesn't match parameter module [$MODULE]"
+        exit 1
+    fi
+else
+    # No module tag in message, add it
+    COMMIT_MSG="[$MODULE] $COMMIT_MSG"
+fi
+
 # Get the latest tag for this module
 LATEST_TAG=$(git tag -l "${TAG_PREFIX}*" --sort=-v:refname | head -n 1)
 

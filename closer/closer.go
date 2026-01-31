@@ -74,7 +74,7 @@ func (c *Closer) CloseAll() {
 
 		callbacksCount := len(c.closeCallbacks)
 		for i, _ := range c.closeCallbacks {
-			err := c.closeCallbacks[callbacksCount-i]()
+			err := c.closeCallbacks[callbacksCount-i-1]()
 			if err != nil {
 				c.logger.Error("error during closing",
 					zap.Error(err),
