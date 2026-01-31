@@ -24,7 +24,9 @@ go get -u github.com/trcmkr/ba/<module_name>
 ## Features
 
 - [x] closer – release resources on context done or any of signals
-- [ ] utils – lo-inspired collection of functions
+- [x] utils – lo-inspired collection of functions
+- [ ] kafka pub/sub – subscriber and publisher for kafka
+- [ ] flusher – accumulates elements into a batch and on flush passes the batch to a handler 
 
 --- 
 
